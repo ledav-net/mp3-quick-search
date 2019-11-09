@@ -1,0 +1,222 @@
+/*
+ * MP3 Quick Search v1.0.0
+ *
+ * Copyright 2005-2019 by David De Grave <david@ledav.net>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ */
+
+BODY {
+#background-color:	#d0e4fe;
+background-color:	#C2C2FF;
+#background-color:	#DADACE;
+}
+
+A {
+text-decoration:	none;  
+color:			blue;  
+font-family:		Tahoma, monospace;
+font-size:		12px;
+}
+
+A:visited {
+color:		green;
+}
+
+A:active {
+color:		#990000;
+}
+
+A:hover {
+text-decoration: underline;
+color:		red;
+}
+
+P {
+font-family:    Helvetica;
+font-size:      12px;
+}
+
+TABLE {
+font-size:      12px;
+font-family:	sans-serif;
+margin:		2px;
+}
+
+TABLE TH {
+background:     navy;  
+color:          yellow;
+font-family:	arial;
+font-size:	12px;
+}
+
+TABLE TD {
+vertical-align: middle;
+}
+
+INPUT, SELECT, BUTTON, .input {
+font-family:	Verdana, Arial, Helvetica, sans-serif;
+font-size: 	10px;
+font-weight: 	bold;
+text-decoration:none;
+vertical-align: middle;
+border-width:	2px;
+margin:		1px;
+background:	#f0f5f5; /* ghostwhite; */
+}
+
+QUOTE {
+color:          grey;
+font-family:    Tahoma;
+font-size:      10px;
+}
+
+COPYRIGHT, COPYRIGHT A:visited {
+color:		grey;
+font-family:	Tahoma;
+font-size:      12px;
+}
+
+.normal {
+}
+
+.normalBigBold {
+font-weight:	bold;
+font-size:	12;
+}
+
+TABLE .rowred {
+background:	red;
+}
+
+TABLE .rowdark,.rowdarkgrey {
+background:     silver;
+}
+TABLE .rowlight,.rowlightgrey {
+background:     lightgrey;
+}  
+
+TABLE .rowdarkgreen {
+background:	#99eb99;
+}
+TABLE .rowlightgreen {
+background:	#b2f0b2;
+}
+
+TABLE .rowdarkorange {
+background:     #FFCC80;
+}
+TABLE .rowlightorange {
+background:     #FFE0B2;
+}
+
+TABLE .rowdarkblue {
+background:	SteelBlue;
+}
+TABLE .rowlightblue {
+background:	LightBlue;
+}
+
+TABLE .rowdarkred {
+background:	#f0b2b2;
+}
+TABLE .rowlightred {
+background:	#f5cccc;
+}
+
+TABLE .rowdarkyellow {
+background:	#daa520;
+}
+TABLE .rowlightyellow {
+background:	#ffd700;
+}
+
+TABLE .rowdark:hover,
+TABLE .rowdarkred:hover,
+TABLE .rowdarkorange:hover,
+TABLE .rowdarkyellow:hover,
+TABLE .rowdarkblue:hover,
+TABLE .rowdarkgreen:hover {
+#	background: lightcyan;
+	background: #C2C200;
+}
+
+TABLE .rowlight:hover,
+TABLE .rowlightred:hover,
+TABLE .rowlightorange:hover,
+TABLE .rowlightyellow:hover,
+TABLE .rowlightblue:hover,
+TABLE .rowlightgreen:hover {
+#	background: lightcyan;
+	background: #C2C200;
+}
+
+.surlined {
+background:	yellow;
+color:		black;
+}
+.surlinedred {
+background:	red;
+color:		white;
+}
+.surlinedgreen {
+background:	green;
+color:		white;
+}
+
+.msg_table {
+}
+.msg_success {
+background:		LightGreen;
+color:			blue;
+font-family:		courier;
+font-size:		11px;
+}
+.msg_error {
+background:		LightCoral;
+color:			blue;
+font-family:		courier;
+font-size:		11px;
+font-weight:		bold;
+}
+.msg_info {
+background:		DarkCyan;
+color:			white;
+font-family:		courier;
+font-size:		11px;
+}
+.msg_notice {
+background:		Orange;
+color:			white;
+font-family:		courier;
+font-size:		11px;
+}
+
+.pagenav {
+color:     black;
+font-size: 14;
+}
+.pagenav.numbers:hover {
+color: red;
+}
+.pagenav.numbers:visited, .pagenav.next:visited, .pagenav.prev:visited {
+color: black;
+}
+.pagenav.current {
+color:       blueviolet;
+font-weight: bolder;
+font-size:   16;
+}
