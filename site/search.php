@@ -40,12 +40,6 @@ define('C_PUBLIC_URL',      'http://www.example.com/mp3');	/* Public url to acce
 define('C_DIR_AUDIOPLAYER', '../tools/audio-player');		/* Where the audio-player is located */
 define('C_MAX_ROWS',        50);				/* Default number of rows to show per page */
 
-require_once('playlist.class.php');
-
-$PLAYLISTS = array(
-	array(eventname => 'pldefault', title => 'Default', playlist => new PlayList('../playlists/playlist.lst')),
-);
-
 $selfScript = $_SERVER['PHP_SELF'];
 
 /*  User access checks
@@ -58,6 +52,15 @@ if ( ! $user->isMember('authenticated') ) {
 	exit;
 }
 $priviledgedUser = $user->isMember('mp3admin');
+
+/*  Playlists handling
+ */
+if ( $priviledgedUser ) {
+	require_once('playlist.class.php');
+	$PLAYLISTS = array(
+		array(eventname => 'pldefault', title => 'Default', playlist => new PlayList('../playlists/playlist.lst')),
+	);
+}
 
 /* Frameset handling
  */
@@ -104,7 +107,7 @@ if ( $framePlay ) {
 			initialvolume: 80 });
 	</script>
 	</head>
-	<body bgcolor="#D0E4FE">
+	<body>
 	<center><table border=0 align=center><tr><td><p id="audioplayer_1">Loading player ...</p></td></tr></table></center>
 	<script type="text/javascript">
 		AudioPlayer.embed("audioplayer_1", {
@@ -228,7 +231,7 @@ if ( $priviledgedUser ) {
 			$log->add("Setting OK! ..... '$fileName' ($filePath)");
 			$showMsg[] = array("msg_success", "<i>$fileName</i> is marked as good [<b style=\"color:green;\">OK</b>] !");
 		} 
-	}else     
+	}else
 	if ( isset($_POST['btntrash']) ) {
 		if ( fmove($filePath, $fileName, C_DIR_TRASH, "TRASH") ) {
 			$log->add("Setting TRASH .... '$fileName' ($filePath)");
@@ -321,11 +324,11 @@ if ( isset($_GET['word']) ) {
 	}
 }
 
-if ( isset($_GET['last']) && ! empty($_GET['last']) ) {
-	$searchStr = ' -ctime '. escapeshellarg("-".$_GET['last']);
+if ( ! empty($_GET['last']) ) {
+	$searchStr .= ' -mtime '. escapeshellarg("-".$_GET['last']);
 }
 
-$searchCmd=C_BIN_FIND.' '."$searchDir -wholename './.*' -prune -o \\( $searchStr \\) -a -iname '*.mp3' -type f -printf '%f|%k|%h\\n' 2> /dev/null | sort -f";
+$searchCmd=C_BIN_FIND." $searchDir \\( -wholename './.*' -prune \\) -o \\( $searchStr \\) -iname '*.mp3' -type f -printf '%f|%k|%h\\n' 2>/dev/null | sort -f";
 
 /**
  *  m3u playlist generation
@@ -563,7 +566,7 @@ function SubmitCheckBox(obj) {
  <? if ( $frameSearch ) { ?><input type=hidden name=fs value=2><? } ?>
  <input type=hidden name=dir  value="<?=C_DIR_NEW?>">
  <input type=hidden name=word value="">
- <input type=hidden name=last value="<?=isset($_GET['last']) ? $_GET['last'] : '' ?>">
+ <input type=hidden name=last value="">
  <input type=submit value="Show New" title="show the mp3 waiting in the '<?=C_DIR_NEW?>' folder to be classified">
 </td>
 </form>
@@ -641,9 +644,10 @@ if ( ! empty($searchStr) ) {
 		if ( $priviledgedUser ) {
 			?><input type=submit name=btnok    value=OK    title="Set this file as OK (move it to <?=C_DIR_OK?>)" onClick="return Sure('OK',file.value);"<? if ($l == C_DIR_OK) echo ' DISABLED'; ?>><?
 			?><input type=submit name=btntrash value=Trash title="Trash this file" onClick="return Sure('Trash',file.value);"><?
-			foreach ( $PLAYLISTS as $PL )
-			?><input type=checkbox name="<?=$PL['eventname']?>" title="<?=$PL['title']?>" onChange="return SubmitCheckBox(this);"<?
+			foreach ( $PLAYLISTS as $PL ) {
+				?><input type=checkbox name="<?=$PL['eventname']?>" title="<?=$PL['title']?>" onChange="return SubmitCheckBox(this);"<?
 				if ( $PL['playlist']->exist($f, $l) ) echo ' checked'; ?>><?
+			}
 		}
 		?></td>
 		</form>
