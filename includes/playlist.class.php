@@ -88,18 +88,6 @@ class PlayList {
 		return FALSE;	
 	}
 
-	function cleanup() {
-		$pending = FALSE;
-		foreach ( $this->pl as $id => $song ) {
-			if ( ! file_exists($song[0].'/'.$song[1]) ) {
-				$this->pl[$id] = array();
-				$this->count--;
-				$this->pending = $pending = TRUE;
-			}
-		}
-		return $pending;
-	}
-	
 	function add($file, $dir) {
 		if ( ! $this->exist($file, $dir) && file_exists($dir.'/'.$file) ) {
 			$this->pl[] = array($dir, $file);
@@ -111,17 +99,31 @@ class PlayList {
 		return FALSE;
 	}
 
+	function remid($id) {
+		$this->pl[$id] = array();
+		$this->count--;
+		$this->pending = TRUE;
+		return TRUE;
+	}
+
 	function rem($file, $dir) {
 		foreach ( $this->pl as $id => $song ) {
 			if ( strcmp($song[0], $dir  ) == 0
 			&&   strcmp($song[1], $file ) == 0 ) {
-				$this->pl[$id] = array();
-				$this->count--;
-				$this->pending = TRUE;
-				return TRUE;
+				return $this->remid($id);
 			}
 		}
 		return FALSE;
+	}
+
+	function cleanup() {
+		$pending = FALSE;
+		foreach ( $this->pl as $id => $song ) {
+			if ( ! file_exists($song[0].'/'.$song[1]) ) {
+				$pending = $this->remid($id);
+			}
+		}
+		return $pending;
 	}
 
 	function update() {
