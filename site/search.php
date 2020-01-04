@@ -320,7 +320,7 @@ if ( isset($_GET['word']) ) {
 		$searchStr .= '-regex '. escapeshellarg("\./+(.*)/+($e).*");
 	}else{
 		$masks = preg_split("/ +/", trim($_GET['word']));
-		while ( $e = each($masks) ) $searchStr .= ' -iname '. escapeshellarg('*'.$e[1].'*');
+		foreach ( $masks as $e ) $searchStr .= ' -iname '. escapeshellarg('*'.$e.'*');
 	}
 }
 
