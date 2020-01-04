@@ -41,7 +41,7 @@ class ResultSetBrowser {
 	private $startLn;		/* Calculated start of the result set window (line number) */
 	private $endLn;			/* Calculated end ... */
 
-	function ResultSetBrowser($rsbwin = RSB_WINDOW_SIZE, $key = "", $lifeTime = RSB_CACHE_LIFETIME) {
+	function __construct($rsbwin = RSB_WINDOW_SIZE, $key = "", $lifeTime = RSB_CACHE_LIFETIME) {
 		$this->pge = isset($_REQUEST['rsbpge']) ? $_REQUEST['rsbpge'] : 1;
 		$this->win = isset($_REQUEST['rsbwin']) ? $_REQUEST['rsbwin'] : $rsbwin;
 		$this->setIndex();

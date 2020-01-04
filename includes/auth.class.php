@@ -28,7 +28,7 @@ class Auth {
 	public $login;
 	public $groups = array();
 
-	function Auth($useApacheAuth = false, $user = NULL, $authF = "../auth/passwd", $authGF = "../auth/group") {
+	function __construct($useApacheAuth = false, $user = NULL, $authF = "../auth/passwd", $authGF = "../auth/group") {
 
 		if ( ! $useApacheAuth ) {
 			/* Not using apache for authentication. Do it ourself... */

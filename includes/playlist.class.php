@@ -27,7 +27,7 @@ class PlayList {
 	private	$pl;
 	private $pending;
 
-	function PlayList($pl, $load = TRUE) {
+	function __construct($pl, $load = TRUE) {
 		$this->playlist = $pl;
 		$this->count    = 0;
 		$this->pending  = FALSE;
