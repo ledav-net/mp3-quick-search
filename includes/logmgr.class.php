@@ -61,7 +61,7 @@ class LogMgr {
 
 	function setOptions($opts) {
 		$this->options = $opts;
-		$this->sync    = ($opts & LOG_OPT_SYNC);
+		$this->sync    = ($opts & LOG_OSYNC);
 	}
 
 	function reopen() {
