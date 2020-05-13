@@ -590,6 +590,15 @@ function SubmitCheckBox(obj) {
  <input type=submit value="Show New" title="show the mp3 waiting in the '<?=C_DIR_NEW?>' folder to be classified">
 </td>
 </form>
+<form method=get action="<?=$selfScript?>">
+<td>
+ <? if ( $frameSearch ) { ?><input type=hidden name=fs value=2><? } ?>
+ <input type=hidden name=dir  value="">
+ <input type=hidden name=word value="">
+ <input type=hidden name=last value="1">
+ <input type=submit value="Show Today" title="show the last 24h mp3">
+</td>
+</form>
 </tr>
 <tr valign=middle>
 <form enctype="multipart/form-data" method=post action="#">
