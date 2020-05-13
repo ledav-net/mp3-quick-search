@@ -190,6 +190,9 @@ if ( isset($_POST['btnupload']) ) {
 		$showMsg[] = array("msg_error", "No file received... Please try again...");
 		$log->add('Tried to upload something ...');
 	}else{
+		$_ok=0;
+		$_err=0;
+		$_dup=0;
 		for ( $i=0 ; isset($_FILES['upload']['name'][$i]) ; $i++ ) {
 			$uplFileType     = $_FILES['upload']['type'][$i];
 			$uplFileName     = preg_replace('/(\.mp3)+$/i','',ltrim($_FILES['upload']['name'][$i],'.')).".mp3";
@@ -197,18 +200,27 @@ if ( isset($_POST['btnupload']) ) {
 			if ( file_exists($uplFileNameDest) ) {
 				$showMsg[] = array("msg_error", "<i>$uplFileName</i> was already uploaded ...");
 				$log->add("*WARNING* file '$uplFileName' already exist !");
+				$_dup++;
 			}else
 			if ( @move_uploaded_file($_FILES['upload']['tmp_name'][$i], $uplFileNameDest) ) {
 				@chmod($uplFileNameDest, 0666);
 				@system(C_BIN_MP3GAIN.' -q -c -r -p '.escapeshellarg($uplFileNameDest).' >> '.$log->logFile.' 2>&1');
-				$showMsg[] = array("msg_success", "<i>$uplFileName</i> well received. Thanks !");
+				$showMsg[] = array("msg_success", "<i>$uplFileName</i> ...");
 				$log->add("Uploaded '$uplFileName'");
 				$rsb->dropResult();
+				$_ok++;
 			}else{
 				$showMsg[] = array("msg_error", "<i>$uplFileName</i> internal error ...");
 				$log->add("*ERROR* trying to move uploaded file '$uplFileName'");
+				$_err++;
 			}
 		}
+		if ( $_ok )
+			$showMsg[] = array("msg_info", "<b>$_ok</b> file(s) well received. Thanks !");
+		if ( $_dup )
+			$showMsg[] = array("msg_notice", "<b>$_dup</b> where already sent ..");
+		if ( $_err )
+			$showMsg[] = array("msg_error", "<b>$_err</b> errors encountered... Please double check !");
 	}
 }else
 if ( isset($_POST['btndown']) ) {
