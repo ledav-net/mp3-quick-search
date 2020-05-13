@@ -61,7 +61,7 @@ $priviledgedUser = $user->isMember('mp3admin');
 if ( $priviledgedUser ) {
 	require_once('playlist.class.php');
 	$PLAYLISTS = array(
-		array(eventname => 'pldefault', title => 'Default', playlist => new PlayList('../playlists/playlist.lst')),
+		array('eventname' => 'pldefault', 'title' => 'Default', 'playlist' => new PlayList('../playlists/playlist.lst')),
 	);
 }
 
