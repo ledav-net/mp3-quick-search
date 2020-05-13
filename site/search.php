@@ -42,6 +42,9 @@ define('C_MAX_ROWS',        50);				/* Default number of rows to show per page *
 
 $selfScript = $_SERVER['PHP_SELF'];
 
+/* Fix UTF-8 filename problems with system() & escapeshellarg() funcs... */
+setlocale(LC_CTYPE, "en_US.UTF-8");
+
 /*  User access checks
  */
 require_once('auth.class.php');
