@@ -433,6 +433,11 @@ function resizeMe() {
 		"'%F\\t%t\\t%n\\t%a\\t%l\\t%y\\t%c\\t%G\\t%g\\t%v\\t%L\\t%r\\t%Q\\t%o\\t%e\\t%E\\t%C\\t%O\\t%p\\t%m\\t%02s\\t%k\\t%u\\t%b' ".
 		"-- $filePathEscaped/$fileNameEscaped 2> /dev/null"));
 
+	$isMp3InfosPresent = empty($mp3info[7]);
+
+	if ( $isMp3InfosPresent )
+		$mp3info[7] = "12"; // Select 'Other' by default
+
 	if ( $priviledgedUser ) {?>
 	<form method=post>
 	<input type=hidden name=path value="<?=$filePath?>">
@@ -466,7 +471,7 @@ function resizeMe() {
 	<tr><td>Artist:</td><td colspan=3><?=$mp3infohtml['artist']?></td></tr>
 	<tr><td>Album:</td><td><?=$mp3infohtml['album']?></td><td>Year:</td><td><?=$mp3infohtml['year']?></td></tr>
 	<tr><td>Comment:</td><td><?=$mp3infohtml['comment']?></td><td>Genre:</td><td NOWRAP><?=$mp3infohtml['genrevalue']?></td></tr>
-	<tr><td colspan=4 align=center><?=$mp3info[7] == '' ? '<i style="color:grey">no tag v1 is set</i>' : '&nbsp;'?></td></tr><?
+	<tr><td colspan=4 align=center><?=$isMp3InfosPresent ? '<i style="color:grey">no tag v1 is set</i>' : '&nbsp;'?></td></tr><?
 	if ( $priviledgedUser ) {?>
 	<tr><td colspan=4 align=center>
 		<input type=submit name="btnupdatetag"  value="Update v1 tag">
