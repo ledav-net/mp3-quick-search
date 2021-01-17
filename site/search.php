@@ -80,42 +80,18 @@ if ( $framePlay ) {
 	/* PLAYER FRAME */
 	/****************/
 
-	/* Javascript & characters problem in filenames, workaround: */
-	$in = array("%",    "#",    ",",    "&",  "+",  "\$", "\\");
-	$ou = array("%2525","%2523","%252C","%26","%2B","%24","%5C");
-	$file = str_replace($in, $ou, $_GET['play']);
-
 	?><html>
 	<head>
 	<link type="text/css" rel="stylesheet" href="search.css">
-	<script type="text/javascript" src="<?=C_DIR_AUDIOPLAYER?>/audio-player.js"></script>
-	<script type="text/javascript">
-		AudioPlayer.setup("<?=C_DIR_AUDIOPLAYER?>/player.swf", {
-			width: 480,
-			autostart: "yes",
-			animation: "no",
-			remaining: "no",
-			buffer: 10,
-			transparentpagebg: "yes",
-			lefticon:     "0xffffff",
-			righticon:    "0xffffff",
-			tracker:      "0x8599e6",
-			track:        "0xcad0db",
-			loader:       "0x383636",
-			border:       "0x383636",
-			rightbg:      "0x0d1d94",
-			rightbghover: "0x2d3db4",
-			leftbg:       "0x0d1d94",
-			bg:           "0x345aba",
-			initialvolume: 80 });
-	</script>
 	</head>
 	<body>
-	<center><table border=0 align=center><tr><td><p id="audioplayer_1">Loading player ...</p></td></tr></table></center>
-	<script type="text/javascript">
-		AudioPlayer.embed("audioplayer_1", {
-			soundFile: "<?=$file?>"});
-	</script>
+	<center>
+	<table width="90%" height="90%" border=0><tr><td align=center valign=center>
+		<audio style="width: 50%" controls=controls preload=auto autoplay=autoplay>
+			<source src="<?=$_GET['play']?>" type="audio/mpeg">
+		</audio>
+	</td></tr></table>
+	</center>
 	</body>
 	</html><?
 	exit;
@@ -139,7 +115,7 @@ if ( $frameMain ) {
 	?>
 	<html>
 	<title>MP3 Quick Search</title>
-	<frameset rows="33,*" border=1>
+	<frameset rows="50,*" border=1>
 	  <frame name=play   marginwidth=0 marginheight=0 scrolling=auto src="?fs=1&amp;play=<?=urlencode($_GET['play']);?>">
 	  <frame name=search marginwidth=0 marginheight=0 scrolling=auto src="?fs=2&amp;<?=$queryUrl.$rsb->getUrlParams('&amp;')?>#POS<?=$_GET['pos']?>">
 	</frameset>
