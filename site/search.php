@@ -86,11 +86,16 @@ if ( $framePlay ) {
 	</head>
 	<body>
 	<center>
-	<table width="90%" height="90%" border=0><tr><td align=center valign=center>
-		<audio style="width: 50%" controls=controls preload=auto autoplay=autoplay>
-			<source src="<?=$_GET['play']?>" type="audio/mpeg">
-		</audio>
-	</td></tr></table>
+	<table width="90%" height="90%" border=0 cellspacing=0>
+		<tr><td align=center valign=center>
+			<b><?=$_GET['play']?></b>
+		</td></tr>
+		<tr><td align=center valign=center>
+			<audio style="width: 50%" controls=controls preload=auto autoplay=autoplay>
+				<source src="<?=$_GET['play']?>" type="audio/mpeg">
+			</audio>
+		</td></tr>
+	</table>
 	</center>
 	</body>
 	</html><?
@@ -115,7 +120,7 @@ if ( $frameMain ) {
 	?>
 	<html>
 	<title>MP3 Quick Search</title>
-	<frameset rows="50,*" border=1>
+	<frameset rows="70,*" border=1>
 	  <frame name=play   marginwidth=0 marginheight=0 scrolling=auto src="?fs=1&amp;play=<?=urlencode($_GET['play']);?>">
 	  <frame name=search marginwidth=0 marginheight=0 scrolling=auto src="?fs=2&amp;<?=$queryUrl.$rsb->getUrlParams('&amp;')?>#POS<?=$_GET['pos']?>">
 	</frameset>
