@@ -3,11 +3,11 @@
 #
 # authenticated -> Any user allowed to use this tool.
 #
-authenticated: foo
+authenticated: foo admin
 #
 # mp3admin -> Administrator user. Can modify mp3, descriptions,
 #             rename, etc. (Turn on advanced mode).
 #
 # Uncomment to give advanced access to foo.
 #
-#mp3admin: foo
+mp3admin: admin

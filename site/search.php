@@ -36,8 +36,7 @@ define('C_BIN_MP3GAIN', '/usr/bin/mp3gain');			/* mp3gain tool path/name (mp3gai
 define('C_BIN_MP3STRIP','/usr/local/bin/mp3stripv2tag');	/* mp3stripv2tag tool path/name */
 define('C_BIN_FIND',	'/usr/bin/find');			/* find tool path/name */
 
-define('C_PUBLIC_URL',      'http://www.example.com/mp3');	/* Public url to access the mp3 (for winamp playlist) */
-define('C_DIR_AUDIOPLAYER', '../tools/audio-player');		/* Where the audio-player is located */
+define('C_PUBLIC_URL',      'https://mp3.example.com/');	/* Public url to access the mp3 (for winamp playlist) */
 define('C_MAX_ROWS',        50);				/* Default number of rows to show per page */
 
 $selfScript = $_SERVER['PHP_SELF'];
@@ -393,7 +392,7 @@ function resizeMe() {
 		&nbsp;<?
 	}?>
 	</td></tr>
-	<tr><td valign=bottom colspan=3><a title="permalink" href="/public/mp3/<?=$rp?>/<?=$rf?>"><?=$fileName?></a></td></tr><?
+	<tr><td valign=bottom colspan=3><a title="permalink" href="<?=C_PUBLIC_URL.$rp?>/<?=$rf?>"><?=$fileName?></a></td></tr><?
 	if ( $priviledgedUser ) {
 		$fileNameNoExt = preg_replace('/(\.mp3)+$/i','',$fileName);?>
 	<form method=post>
@@ -528,8 +527,8 @@ function SubmitCheckBox(obj) {
 </script>
 </head>
 <body>
-<a href="/public" target="_top"   title="Back to public">[back]</a>
-<a href="."       target="_blank" title="Open a new quick search page">[*]</a>
+<a href="/" target="_top"   title="Back">[back]</a>
+<a href="." target="_blank" title="Open a new quick search page">[*]</a>
 <a href="?genwinamplist=1&amp;<?=$queryUrl?>" title="Generate a playlist with this result set (m3u)">[playlist]</a>
 <? if ( $priviledgedUser ) { ?>
 <a href="?showlog=1"    target="_blank">[view search log]</a>
