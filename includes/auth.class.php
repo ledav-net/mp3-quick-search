@@ -28,25 +28,26 @@ class Auth {
 	public $login;
 	public $groups = array();
 
-	function __construct($useApacheAuth = false, $user = NULL, $authF = "../auth/passwd", $authGF = "../auth/group") {
+	function __construct($useApacheAuth = false, $authF = "../auth/passwd", $authGF = "../auth/group") {
+
+		$this->authFile = $authF;
+		$this->authGroupFile = $authGF;
+		$this->login = $_SERVER['PHP_AUTH_USER'];
 
 		if ( ! $useApacheAuth ) {
 			/* Not using apache for authentication. Do it ourself... */
-			if ( empty($_SERVER['PHP_AUTH_USER']) ) {
+			if ( empty($this->login) ) {
 				$this->authenticate("Protected content");
 				exit;
 			}
-			$this->authFile = $authF;
-			$this->authGroupFile = $authGF;
 
 			$f = fopen($this->authFile, 'r');
 			while ( ($l = fgets($f)) ) {
 				list($user, $pass) = preg_split('/:/', $l);
-				if ( $user == $_SERVER['PHP_AUTH_USER'] ) {
+				if ( $user == $this->login ) {
 					/* BUG: Should at least use an encrypted method (digest ?) ... */
 					if ( trim($pass) == $_SERVER['PHP_AUTH_PW'] ) {
 						$this->authenticated = true;
-						$this->login = $user;
 					}
 					break;
 				}
@@ -57,12 +58,16 @@ class Auth {
 				$this->authenticate("Protected content");
 				exit;
 			}
+		} else {
+			/* If using apache auth config, consider the user is
+			 * authenticated as it reached this code.
+			 */
+			$this->authenticated = true;
 		}
-		/* If using apache auth config, consider the user is authenticated. */
-		$this->authenticated = true;
+
 		$f = fopen($this->authGroupFile, 'r');
 		while ( ($l = fgets($f)) )
-			if ( $l[0] != '#' && strpos($l, $user) )
+			if ( $l[0] != '#' && strpos($l, $this->login) )
 				$this->groups[] = substr($l, 0, strpos($l, ":"));
 		fclose($f);
 	}

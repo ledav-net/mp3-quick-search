@@ -49,6 +49,7 @@ setlocale(LC_CTYPE, "en_US.UTF-8");
  */
 require_once('auth.class.php');
 $user = new Auth();
+//$user = new Auth($useApacheAuth=true); // Use this if you are using apache authentication with htpasswd etc...
 
 if ( ! $user->isMember('authenticated') ) {
 	echo "Sorry, you are not authorized to use this tool !";
