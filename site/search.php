@@ -362,7 +362,7 @@ if ( isset($_GET['getinfos']) ) {?>
 <html>
 <head>
 <title>MP3 Info</title>
-<link type="text/css" rel="stylesheet" href="/mystyles/ledav.net-public.css">
+<link type="text/css" rel="stylesheet" href="search.css">
 <script type="text/javascript">  
 function keyPressed(e) {
 	switch ( e.keyCode ) {
@@ -496,7 +496,7 @@ function resizeMe() {
 <html>
 <head>
 <title>MP3 Quick Search</title>
-<link type="text/css" rel="stylesheet" href="/mystyles/ledav.net-public.css">
+<link type="text/css" rel="stylesheet" href="search.css">
 <script type="text/javascript">
 function loadit() {
 	imgbox=document.getElementById("loadingimg");
