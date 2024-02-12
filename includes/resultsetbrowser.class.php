@@ -127,8 +127,9 @@ class ResultSetBrowser {
 	}
 
 	function get() {
-		$r = each($this->resultSet);
-		return $r ? $r[1] : FALSE;
+		$r = current($this->resultSet);
+		next($this->resultSet);
+		return $r ?: FALSE;
 	}
 	
 	function getFull() {
