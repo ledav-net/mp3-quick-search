@@ -439,6 +439,8 @@ $rf=rawurlencode($fileName);
 	$filePathEscaped = escapeshellarg($filePath);
 	$fileNameEscaped = escapeshellarg($fileName);
 
+	$mp3stat = stat($filePath.'/'.$fileName);
+
 	$mp3info =
 		explode("\t",
 		exec(C_BIN_MP3INFO." -F -r m -x -p ".
@@ -454,12 +456,12 @@ $rf=rawurlencode($fileName);
 	<form method=post>
 	<input type=hidden name=path value="<?=$filePath?>">
 	<input type=hidden name=file value="<?=$fileName?>"><?
-		$mp3infohtml['title']      = '<input type=text name=title      value="'.$mp3info[1].'" size=40 maxlength=30>';
-		$mp3infohtml['track']      = '<input type=text name=track      value="'.$mp3info[2].'" size=2  maxlength=2>';
-		$mp3infohtml['artist']     = '<input type=text name=artist     value="'.$mp3info[3].'" size=40 maxlength=30>';
-		$mp3infohtml['album']      = '<input type=text name=album      value="'.$mp3info[4].'" size=40 maxlength=30>';
-		$mp3infohtml['year']       = '<input type=text name=year       value="'.$mp3info[5].'" size=4  maxlength=4>';
-		$mp3infohtml['comment']    = '<input type=text name=comment    value="'.$mp3info[6].'" size=40 maxlength=30>';
+		$mp3infohtml['title']      = '<input type=text name=title   value="'.$mp3info[1].'" size=40 maxlength=30>';
+		$mp3infohtml['track']      = '<input type=text name=track   value="'.$mp3info[2].'" size=2  maxlength=2>';
+		$mp3infohtml['artist']     = '<input type=text name=artist  value="'.$mp3info[3].'" size=40 maxlength=30>';
+		$mp3infohtml['album']      = '<input type=text name=album   value="'.$mp3info[4].'" size=40 maxlength=30>';
+		$mp3infohtml['year']       = '<input type=text name=year    value="'.$mp3info[5].'" size=4  maxlength=4>';
+		$mp3infohtml['comment']    = '<input type=text name=comment value="'.$mp3info[6].'" size=40 maxlength=30>';
 		$mp3infohtml['genrevalue'] = '<select name=genrevalue class=input value="'.$mp3info[7].'">';
 		$f = fopen(C_TXT_GENRES, "r");
 		while ( ($r = fgets($f, 64)) ) {
@@ -501,7 +503,10 @@ $rf=rawurlencode($fileName);
 	<tr><td>Original:</td><td colspan=3><?=$mp3info[17]?></td></tr>
 	<tr><td>Padding:</td><td colspan=3><?=$mp3info[18]?></td></tr>
 	<tr><td>Length:</td><td colspan=3><?=$mp3info[19]?>:<?=$mp3info[20]?></td></tr>
-	<tr><td>Size</td><td colspan=3><?=$mp3info[21]?> Kb</td></tr><?
+	<tr><td>Access</td><td colspan=3><?=date('d M Y H:i:s',$mp3stat['atime'])?></td></tr>
+	<tr><td>Modified</td><td colspan=3><?=date('d M Y H:i:s',$mp3stat['mtime'])?></td></tr>
+	<tr><td>Changed</td><td colspan=3><?=date('d M Y H:i:s',$mp3stat['ctime'])?></td></tr>
+	<tr><td>Size</td><td colspan=3><?=number_format($mp3info[21],0,'.','.')?> Kb (<?=number_format($mp3stat['size'],0,'.','.')?> bytes)</td></tr><?
 	if ( $priviledgedUser ) {?>
 	<form method=post>
 	<input type=hidden name=path value="<?=$filePath?>">
