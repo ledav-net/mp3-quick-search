@@ -102,8 +102,8 @@ if ( $framePlay ) {
 			?></b>
 		</td></tr>
 		<tr><td align=center valign=center>
-			<audio style="width: 50%" controls=controls preload=auto autoplay=autoplay>
-				<source src="<?=$_GET['play']?>" type="audio/mpeg">
+			<audio style="width: 50%" controls preload=none autoplay>
+				<source src="<?=$_GET['play'].($priviledgedUser ? '?'.$_SERVER['REQUEST_TIME'] : '');/* Avoid caching for the admin */?>" type="audio/mpeg">
 			</audio>
 		</td></tr>
 	</table>
