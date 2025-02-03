@@ -353,7 +353,7 @@ if ( ! empty($_GET['last']) ) {
 	$searchStr .= ' -mtime '. escapeshellarg("-".$_GET['last']);
 }
 
-$searchCmd=C_BIN_FIND." $searchDir \\( -path './.*' -prune \\) -o \\( $searchStr \\) -iname '*.mp3' -type f -printf '%f|%k|%h\\n' 2>/dev/null | sort -f";
+$searchCmd=C_BIN_FIND." $searchDir \\( -path './.*' -prune \\) -o \\( $searchStr \\) -iname '*.mp3' -type f -printf '%f|%s|%h\\n' 2>/dev/null | sort -f";
 
 /**
  *  m3u playlist generation
@@ -659,7 +659,8 @@ if ( ! empty($searchStr) ) {
 	do {
 		list($f, $s, $l) = explode('|', $read);
 
-		$l = substr($l, 2, strlen($l) - 3);
+		$s = $s / 1024;
+		$l = substr($l, 2, strlen($l) - 3); // Strip './' & '\n'
 		$P = rawurlencode($l).'/'.rawurlencode($f);
 
 		switch ( $l ) {
