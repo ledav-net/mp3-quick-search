@@ -178,6 +178,7 @@ if ( isset($_POST['btnupload']) ) {
 		for ( $i=0 ; isset($_FILES['upload']['name'][$i]) ; $i++ ) {
 			$uplFileType     = $_FILES['upload']['type'][$i];
 			$uplFileName     = preg_replace('/(\.mp3)+$/i','',ltrim($_FILES['upload']['name'][$i],'.')).".mp3";
+			$uplFileName     = mb_convert_encoding($uplFileName, "UTF-8");
 			$uplFileNameDest = C_DIR_NEW."/".$uplFileName;
 			if ( file_exists($uplFileNameDest) ) {
 				$showMsg[] = array("msg_error", "<i>$uplFileName</i> was already uploaded ...");
@@ -245,6 +246,7 @@ if ( $priviledgedUser ) {
 	}else
 	if ( isset($_POST['btnrename']) ) {
 		$fileNameTo=trim($_POST['fileto']).".mp3";
+		$fileNameTo=mb_convert_encoding($fileNameTo, "UTF-8");
 		if ( $fileName == $fileNameTo ) {
 			$showMsg[] = array("msg_error", "Same name ! So, nothing to do :-)");
 		}else
