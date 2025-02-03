@@ -233,7 +233,9 @@ if ( $priviledgedUser ) {
 		if ( fmove($filePath, $fileName, C_DIR_OK, "OK") ) {
 			$log->add("Setting OK! ..... '$fileName' ($filePath)");
 			$showMsg[] = array("msg_success", "<i>$fileName</i> is marked as good [<b style=\"color:green;\">OK</b>] !");
-		} 
+			foreach ( $PLAYLISTS as $PL )
+				$PL['playlist']->chg($fileName, C_DIR_OK);
+		}
 	}else
 	if ( isset($_POST['btnnok']) ) {
 		if ( fmove($filePath, $fileName, C_DIR_NOK, "NoK") ) {
@@ -247,6 +249,8 @@ if ( $priviledgedUser ) {
 		if ( fmove($filePath, $fileName, C_DIR_TRASH, "TRASH") ) {
 			$log->add("Setting TRASH .... '$fileName' ($filePath)");
 			$showMsg[] = array("msg_success", "<i>$fileName</i> is trashed !");
+			foreach ( $PLAYLISTS as $PL )
+				$PL['playlist']->rem($fileName, $filePath);
 		}
 	}else
 	if ( isset($_POST['btnrename']) ) {
@@ -264,9 +268,11 @@ if ( $priviledgedUser ) {
 			}else{
 				$log->add("Renaming '$fileName' to '$fileNameTo' ($filePath)");
 				$showMsg[] = array("msg_success", "Mp3 renamed !");
-				$fileName = $fileNameTo;
 				$reloadParent = true;
 				$rsb->dropResult();
+				foreach ( $PLAYLISTS as $PL )
+					$PL['playlist']->chg($fileName, $filePath, $fileNameTo);
+				$fileName = $fileNameTo;
 			}
 		}
 	}else
@@ -367,7 +373,7 @@ if ( $priviledgedUser ) foreach ( $PLAYLISTS as $PL ) {
 			$PL['playlist']->add($_POST['file'], $_POST['path']);
 		else	$PL['playlist']->rem($_POST['file'], $_POST['path']);
 	}
-	$PL['playlist']->cleanup(); // Remove not found mp3 (file moved/renamed)
+	$PL['playlist']->fixlist(); // Fix mp3 refs that moved or was deleted / renamed from outside
 }
 
 /***************************************************** GET INFOS WINDOW *********************************************************/
@@ -673,7 +679,7 @@ if ( ! empty($searchStr) ) {
 			?><input type=submit name=btntrash value=Trash title="Trash this file" onClick="return Sure('Trash',file.value);"><?
 			foreach ( $PLAYLISTS as $PL ) {
 				?><input type=checkbox name="<?=$PL['eventname']?>" title="<?=$PL['title']?>" onChange="return SubmitCheckBox(this);"<?
-				if ( $PL['playlist']->exist($f, $l) ) echo ' checked'; ?>><?
+				if ( $PL['playlist']->exist($f, $l) !== FALSE ) echo ' checked'; ?>><?
 			}
 		}
 		?></td>

@@ -66,13 +66,16 @@ class PlayList {
 	}
 
 	function first() {
-		reset($this->pl);
-		return current($this->pl);
+		return reset($this->pl);
 	}
 
 	function next() {
 		return next($this->pl);
 	}
+
+	function current() {
+	        return current($this->pl);
+        }
 
 	function outputm3uheader($filename) {
 		header('Content-type: audio/x-mpegurl');
@@ -92,13 +95,13 @@ class PlayList {
 	}
 
 	function exist($file, $dir = "") {
-		foreach ( $this->pl as $pf ) {
-			if ( $dir[0] && strcmp($pf[0], $dir) != 0 )
+		foreach ( $this->pl as $id => $song ) {
+			if ( $dir && strcmp($song[0], $dir) != 0 )
 				continue;
-			if     ( strcmp($pf[1], $file) == 0 )
-				return TRUE;
+			if ( strcmp($song[1], $file) == 0 )
+				return $id;
 		}
-		return FALSE;	
+		return FALSE;
 	}
 
 	function add($file, $dir) {
@@ -119,22 +122,46 @@ class PlayList {
 	}
 
 	function rem($file, $dir) {
-		foreach ( $this->pl as $id => $song ) {
-			if ( strcmp($song[0], $dir  ) == 0
-			&&   strcmp($song[1], $file ) == 0 ) {
-				return $this->remid($id);
-			}
+		$id = $this->exist($file, $dir);
+		if ( $id !== FALSE )
+			return $this->remid($id);
+		return FALSE;
+	}
+
+	function chgid($id, $oldFile, $newDir, $newFile = "") {
+		if ( ! $newFile ) $newFile = $oldFile; else $sort = TRUE;
+		if ( file_exists(PL_MP3DIR.'/'.$newDir.'/'.$newFile) ) {
+			$this->pl[$id] = array($newDir, $newFile);
+			if ( $sort ) $this->sort();
+			return $this->pending = TRUE;
 		}
 		return FALSE;
 	}
 
-	function cleanup() {
+	function chg($oldFile, $newDir, $newFile = "") {
+		if ( ($id = $this->exist($oldFile)) !== FALSE )
+			return $this->chgid($id, $oldFile, $newDir, $newFile);
+	        return FALSE;
+	}
+
+	function findFileSubdir($song) {
+		$f = @popen('find '.PL_MP3DIR.' -not -path "*/.*" -type f -name '.escapeshellarg($song), 'r');
+		while ( ($line = @fgets($f)) )
+			$r = basename(dirname($line));
+		fclose($f);
+		return empty($r) ? FALSE : $r;
+	}
+
+	function fixlist() {
 		$pending = FALSE;
 		foreach ( $this->pl as $id => $song ) {
 			if ( empty($song) )
 				continue;
 			if ( ! file_exists(PL_MP3DIR.'/'.$song[0].'/'.$song[1]) ) {
-				$pending = $this->remid($id);
+				$newdir = $this->findFileSubdir($song[1]);
+				if ( $newdir )
+					$pending = $this->chgid($id, $song[1], $newdir) || $pending;
+				else	$pending = $this->remid($id) || $pending;
 			}
 		}
 		return $pending;
