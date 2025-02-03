@@ -20,6 +20,8 @@
  *
  */
 
+define('PL_MP3DIR', '/site');
+
 class PlayList {
 	public	$playlist;	// Full path and file name of the playlist
 	public  $count;		// Total number of entries
@@ -59,7 +61,6 @@ class PlayList {
 			$this->pl[] = array(basename(dirname($s)), basename($s));
 			$this->count++;
 		}
-		flock($list, LOCK_UN);
 		fclose($list);
 		$this->sort();
 	}
@@ -79,9 +80,15 @@ class PlayList {
 	}
 
 	function outputm3u($baseurl) {
-		foreach ( $this->pl as $song ) {
-			echo $baseurl.'/'.$song[0].'/'.str_replace('%2F','/',rawurlencode($song[1]))."\n";
-		}
+		foreach ( $this->pl as $song )
+			if ( ! empty($song) )
+				echo $baseurl.'/'.$song[0].'/'.str_replace('%2F','/',rawurlencode($song[1]))."\n";
+	}
+
+	function output($root = PL_MP3DIR) {
+		foreach ( $this->pl as $song )
+			if ( ! empty($song) )
+				echo $root.'/'.$song[0].'/'.$song[1]."\n";
 	}
 
 	function exist($file, $dir = "") {
@@ -95,7 +102,8 @@ class PlayList {
 	}
 
 	function add($file, $dir) {
-		if ( ! $this->exist($file, $dir) && file_exists($dir.'/'.$file) ) {
+		if ( $this->exist($file, $dir) === FALSE
+		&&   file_exists(PL_MP3DIR.'/'.$dir.'/'.$file) ) {
 			$this->pl[] = array($dir, $file);
 			$this->count++;
 			$this->sort();
@@ -123,7 +131,9 @@ class PlayList {
 	function cleanup() {
 		$pending = FALSE;
 		foreach ( $this->pl as $id => $song ) {
-			if ( ! file_exists($song[0].'/'.$song[1]) ) {
+			if ( empty($song) )
+				continue;
+			if ( ! file_exists(PL_MP3DIR.'/'.$song[0].'/'.$song[1]) ) {
 				$pending = $this->remid($id);
 			}
 		}
@@ -140,9 +150,7 @@ class PlayList {
 		}
 		foreach ( $this->pl as $song )
 			if ( ! empty($song) )
-				fprintf($list, $song[0].'/'.$song[1]."\n");
-		fflush($list);
-		flock($list, LOCK_UN);
+				fprintf($list, PL_MP3DIR.'/'.$song[0].'/'.$song[1]."\n");
 		fclose($list);
 		$this->pending = FALSE;
 		return TRUE;
