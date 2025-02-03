@@ -94,7 +94,12 @@ if ( $framePlay ) {
 	<center>
 	<table width="90%" height="90%" border=0 cellspacing=0>
 		<tr><td align=center valign=center>
-			<b><?=$_GET['play']?></b>
+			<b><?
+			$t = preg_split('(/| +- +)', $_GET['play']);
+			echo "<a href='?fs=2&word=&dir=".urlencode($t[0])."' target=search>".$t[0]."</a>/";
+			echo "<a href='?fs=2&word=".urlencode($t[1])."' target=search>".$t[1]."</a>";
+			for ( $i=2 ; $i < count($t) ; $i++ ) echo ' - '.$t[$i];
+			?></b>
 		</td></tr>
 		<tr><td align=center valign=center>
 			<audio style="width: 50%" controls=controls preload=auto autoplay=autoplay>
