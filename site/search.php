@@ -25,6 +25,7 @@ ini_set("include_path","../includes" );
 define('C_DIR_BAD',   'corrupt');	/* Corrupted directory. Where the mp3 are moved when set corrupted. */
 define('C_DIR_NEW',   'new');		/* New directory. Where the files are uploaded. */
 define('C_DIR_OK',    'new.ok');	/* OK directory. Where the accepted files are moved. */
+define('C_DIR_NOK',   'new.nok');	/* NoK directory. Where the not accepted files are moved. */
 define('C_DIR_TRASH', 'trashed');	/* Trash directory. Where the 'deleted' files are moved. */
 
 define('C_LOG_FILE',   '../logs/search.log');	/* Log file path/name */
@@ -227,6 +228,14 @@ if ( $priviledgedUser ) {
 			$log->add("Setting OK! ..... '$fileName' ($filePath)");
 			$showMsg[] = array("msg_success", "<i>$fileName</i> is marked as good [<b style=\"color:green;\">OK</b>] !");
 		} 
+	}else
+	if ( isset($_POST['btnnok']) ) {
+		if ( fmove($filePath, $fileName, C_DIR_NOK, "NoK") ) {
+			$log->add("Setting NoK! ..... '$fileName' ($filePath)");
+			$showMsg[] = array("msg_success", "<i>$fileName</i> is marked as not good [<b style=\"color:red;\">NoK</b>] !");
+			foreach ( $PLAYLISTS as $PL )
+				$PL['playlist']->rem($fileName, $filePath);
+		}
 	}else
 	if ( isset($_POST['btntrash']) ) {
 		if ( fmove($filePath, $fileName, C_DIR_TRASH, "TRASH") ) {
@@ -632,6 +641,7 @@ if ( ! empty($searchStr) ) {
 
 		switch ( $l ) {
 			case C_DIR_BAD: $className=($cfiles % 2) ? 'rowdarkorange':'rowlightorange'; break;
+			case C_DIR_NOK: $className=($cfiles % 2) ? 'rowdarkred'   :'rowlightred';    break;
 			case C_DIR_OK:  $className=($cfiles % 2) ? 'rowdarkgreen' :'rowlightgreen';  break;
 			default:     	$className=($cfiles % 2) ? 'rowdark'      :'rowlight';
 		}
@@ -653,6 +663,7 @@ if ( ! empty($searchStr) ) {
 		?><input type=submit name=btncorrupt value=Corrupt title="Set this file as corruped (move it to <?=C_DIR_BAD?>)" onClick="return Sure('CORRUPT',file.value);"<? if ($l == C_DIR_BAD) echo ' DISABLED'; ?>><?
 		if ( $priviledgedUser ) {
 			?><input type=submit name=btnok    value=OK    title="Set this file as OK (move it to <?=C_DIR_OK?>)" onClick="return Sure('OK',file.value);"<? if ($l == C_DIR_OK) echo ' DISABLED'; ?>><?
+			?><input type=submit name=btnnok   value=NoK   title="Set this file as NOT OK (move it to <?=C_DIR_NOK?>)" onClick="return Sure('NoK',file.value);"<? if ($l == C_DIR_NOK) echo ' DISABLED'; ?>><?
 			?><input type=submit name=btntrash value=Trash title="Trash this file" onClick="return Sure('Trash',file.value);"><?
 			foreach ( $PLAYLISTS as $PL ) {
 				?><input type=checkbox name="<?=$PL['eventname']?>" title="<?=$PL['title']?>" onChange="return SubmitCheckBox(this);"<?

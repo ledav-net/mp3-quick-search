@@ -54,6 +54,7 @@ config and this repo as the basic "htdocs" structure:
     │   └── Corrupted mp3 at position 23sec.mp3
     ├── new
     │   └── New example mp3 not yet classified.mp3
+    ├── new.nok
     ├── new.ok
     │   └── Example mp3 marked as good. To be moved manually later in cd02 for example.mp3
     ├── search.css
