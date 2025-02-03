@@ -37,8 +37,8 @@ define('C_BIN_MP3GAIN', '/usr/bin/mp3gain');			/* mp3gain tool path/name (mp3gai
 define('C_BIN_MP3STRIP','/usr/local/bin/mp3stripv2tag');	/* mp3stripv2tag tool path/name */
 define('C_BIN_FIND',	'/usr/bin/find');			/* find tool path/name */
 
-define('C_PUBLIC_URL',      'https://mp3.example.com/');	/* Public url to access the mp3 (for winamp playlist) */
-define('C_MAX_ROWS',        50);				/* Default number of rows to show per page */
+define('C_PUBLIC_URL',	'https://mp3.example.com');	/* Public url to access the mp3 (for winamp playlist) */
+define('C_MAX_ROWS',	50);				/* Default number of rows to show per page */
 
 $selfScript = $_SERVER['PHP_SELF'];
 
@@ -85,7 +85,6 @@ if ( $framePlay ) {
 	/****************/
 	/* PLAYER FRAME */
 	/****************/
-
 	?><html>
 	<head>
 	<link type="text/css" rel="stylesheet" href="search.css">
@@ -391,18 +390,21 @@ function keyPressed(e) {
 	return true;
 }
 function resizeMe() {
-//	tab = document.getElementById("mainTable");
-	//window.resizeTo(tab.width, tab.height);
-//	alert("w="+tab.width+" h="+tab.height);
+	tab = document.getElementById("mainTable");
+	window.resizeTo(tab.offsetWidth+20, tab.offsetHeight+80);
+<?/*
+	console.log("w="+tab.offsetWidth+" h="+tab.offsetHeight+" l="+tab.offsetLeft+" r="+tab.offsetRight);
+*/?>
 }
 </script>
-</head>
-<body onLoad="resizeMe();" width="100%" height="100%" onKeyPress="return keyPressed(event)"<? if ( $reloadParent ) echo ' onBeforeUnload="self.opener.location.replace(self.opener.location.search)"';?>>
-	<table id="mainTable" width="100%" align=left style="font-family:monospace;font-size:13px;float:none" cellspacing=0>
-	<tr><td rowspan=2><a href=""><img src="search-info-icon-64x64.png" alt="refresh" title="refresh"/></a></td><?
-	$rp=rawurlencode($filePath);
-        $rf=rawurlencode($fileName);?>
-        <td colspan=3><?
+</head><?
+$rp=rawurlencode($filePath);
+$rf=rawurlencode($fileName);
+?>
+<body onLoad="resizeMe();<? if ( $reloadParent ) echo 'setTimeout(self.opener.location.replace(self.opener.location.search),200);';?>" width="100%" height="100%" onKeyPress="return keyPressed(event)">
+	<table id="mainTable" align=center style="font-family:monospace;font-size:13px;float:none" cellspacing=0>
+	<tr><td rowspan=2><a href='<?="?getinfos=1&path=$rp&file=$rf"?>'><img src="search-info-icon-64x64.png" alt="refresh" title="refresh"/></a></td>
+	<td colspan=3><?
 	if ( isset($showMsg) ) {?>
 	<table class="msg_table" width="100%"><?
 		foreach ( $showMsg as $msg ) {?>
@@ -413,7 +415,7 @@ function resizeMe() {
 		&nbsp;<?
 	}?>
 	</td></tr>
-	<tr><td valign=bottom colspan=3><a title="permalink" href="<?=C_PUBLIC_URL.$rp?>/<?=$rf?>"><?=$fileName?></a></td></tr><?
+	<tr><td valign=bottom colspan=3><a title="permalink" href="<?=C_PUBLIC_URL.'/'.$rp.'/'.$rf?>"><?=$fileName?></a></td></tr><?
 	if ( $priviledgedUser ) {
 		$fileNameNoExt = preg_replace('/(\.mp3)+$/i','',$fileName);?>
 	<form method=post>
@@ -529,7 +531,7 @@ function Sure(action, text) {
 }
 function getInfos(path, file) {
 	width=800;
-	height="<?= $priviledgedUser ? 705 : 495 ?>";
+	height=<?= $priviledgedUser ? 705 : 495 ?>;
 	x=(screen.width - width) / 2;
 	y=(screen.height - height) / 4;
 	p1="?getinfos=1&path="+path+"&file="+file;
