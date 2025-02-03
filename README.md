@@ -58,7 +58,8 @@ config and this repo as the basic "htdocs" structure:
     │   └── Example mp3 marked as good. To be moved manually later in cd02 for example.mp3
     ├── search.css
     ├── search-genres.txt
-    └── search.php
+    ├── search.php
+    └── trashed
 ```
 
 Virtual host config:

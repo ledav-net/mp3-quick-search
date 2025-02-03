@@ -25,7 +25,7 @@ ini_set("include_path","../includes" );
 define('C_DIR_BAD',   'corrupt');	/* Corrupted directory. Where the mp3 are moved when set corrupted. */
 define('C_DIR_NEW',   'new');		/* New directory. Where the files are uploaded. */
 define('C_DIR_OK',    'new.ok');	/* OK directory. Where the accepted files are moved. */
-define('C_DIR_TRASH', '.Trash');	/* Trash directory. Where the 'deleted' files are moved. */
+define('C_DIR_TRASH', 'trashed');	/* Trash directory. Where the 'deleted' files are moved. */
 
 define('C_LOG_FILE',   '../logs/search.log');	/* Log file path/name */
 define('C_TXT_GENRES', 'search-genres.txt');	/* Text file with id|text for the category list */
