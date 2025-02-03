@@ -21,11 +21,11 @@
  */
 
 class PlayList {
-	public	$playlist;
-	public  $count;
+	public	$playlist;	// Full path and file name of the playlist
+	public  $count;		// Total number of entries
 
-	private	$pl;
-	private $pending;
+	private	$pl;		// array of audio files [0] = path (relative to $PL_MP3DIR), [1] = filename
+	private $pending;	// If pending changes need to be saved on disk
 
 	function __construct($pl, $load = TRUE) {
 		$this->playlist = $pl;
