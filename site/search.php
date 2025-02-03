@@ -282,11 +282,19 @@ if ( $priviledgedUser ) {
 			" -a ".escapeshellarg($_POST['begin']).
 			" -b ".escapeshellarg($_POST['end']).
 			" -i ".escapeshellarg("$filePath/$fileName").
-			" -O ".escapeshellarg("$filePath/$fileName")."-cropped.mp3".
-			" > /dev/null 2>> ".$log->logFile);
-		$showMsg[] = array("msg_success", "<i>$fileName-cropped.mp3</i> created !");
-		$reloadParent = true;
-		$rsb->dropResult();
+			" -O ".escapeshellarg("$filePath/$fileName-cropped.mp3").
+			" > /dev/null 2>> ".$log->logFile, $rc);
+		if ( $rc == 0 ) {
+			if ( $_POST['btncrop'] == "Crop" ) {
+				@unlink("$filePath/$fileName") &&
+				@rename("$filePath/$fileName-cropped.mp3", "$filePath/$fileName");
+				$showMsg[] = array("msg_success", "<i>$fileName</i> cropped !");
+			}
+			else	$showMsg[] = array("msg_success", "<i>$fileName-cropped.mp3</i> created !");
+			$reloadParent = true;
+			$rsb->dropResult();
+		}
+		else	$showMsg[] = array("msg_error", "<i>$fileName</i> cannot be cropped. Error $rc !");
 	}else
 	if ( isset($_POST['btnupdatetag']) ) {
 		$log->add("Updating tag v1 of '$fileName' ($filePath) ...");
@@ -499,8 +507,9 @@ $rf=rawurlencode($fileName);
 	<input type=hidden name=path value="<?=$filePath?>">
 	<input type=hidden name=file value="<?=$fileName?>">
 	<tr><td colspan=4>&nbsp;</td></tr>
-	<tr><td colspan=4>
-		<input type=submit name=btncrop value="Create"> a new mp3 cropped from
+	<tr><td colspan=4 nowrap>
+		<input type=submit name=btncrop value="Crop"> (or
+		<input type=submit name=btncrop value="Create"> a new) mp3 from
 		<input type=text   name=begin   value="0:00.00" size=7 maxlength=8> to
 		<input type=text   name=end     value="<?=$mp3info[19]?>:<?=$mp3info[20]?>.00" size=7 maxlength=8>
 		(mm:ss.cc)</td></tr>
