@@ -345,7 +345,7 @@ if ( ! empty($_GET['last']) ) {
 	$searchStr .= ' -mtime '. escapeshellarg("-".$_GET['last']);
 }
 
-$searchCmd=C_BIN_FIND." $searchDir \\( -wholename './.*' -prune \\) -o \\( $searchStr \\) -iname '*.mp3' -type f -printf '%f|%k|%h\\n' 2>/dev/null | sort -f";
+$searchCmd=C_BIN_FIND." $searchDir \\( -path './.*' -prune \\) -o \\( $searchStr \\) -iname '*.mp3' -type f -printf '%f|%k|%h\\n' 2>/dev/null | sort -f";
 
 /**
  *  m3u playlist generation
@@ -567,7 +567,7 @@ function SubmitCheckBox(obj) {
  <td align=right nowrap><?
  ?><input type=text name=word value="<?=isset($_GET['word']) ? $_GET['word'] : ''?>" size=50 maxlength=128 onFocus="select();" title="Type here some words to search for. Start the input by a / to use 'Regular Expressions' (/! for non-matching)"><?
  ?><select name="dir" title="Limit the search to the specified folder"><?
- $dirs=popen(C_BIN_FIND.' -wholename "./.*" -prune -or -maxdepth 1 -type d -printf "%P\n" | sort','r');
+ $dirs=popen(C_BIN_FIND.' -path "./.*" -prune -or -maxdepth 1 -type d -printf "%P\n" | sort','r');
  $dirSelected = isset($_GET['dir']) ? $_GET['dir'] : "";
  while ( $d = fgets($dirs) ) {
  	$d=trim($d);
