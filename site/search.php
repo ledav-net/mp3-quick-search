@@ -387,7 +387,7 @@ function resizeMe() {
 </head>
 <body onLoad="resizeMe();" width="100%" height="100%" onKeyPress="return keyPressed(event)"<? if ( $reloadParent ) echo ' onBeforeUnload="self.opener.location.replace(self.opener.location.search)"';?>>
 	<table id="mainTable" width="100%" align=left style="font-family:monospace;font-size:13px;float:none" cellspacing=0>
-	<tr><td rowspan=2><a href=""><img src="/myicons/info-icon-4-64x64.png" alt="refresh" title="refresh"/></a></td><?
+	<tr><td rowspan=2><a href=""><img src="search-info-icon-64x64.png" alt="refresh" title="refresh"/></a></td><?
 	$rp=rawurlencode($filePath);
         $rf=rawurlencode($fileName);?>
         <td colspan=3><?
@@ -655,7 +655,7 @@ if ( ! empty($searchStr) ) {
 			?><a name="POS<?=$cfiles+1?>" href="?fs=1&amp;play=<?=$P?>" title="Play this file" target=play><?=$f?></a><?
 		}else{
 			?><a name="POS<?=$cfiles+1?>" href="?fs=0&amp;pos=<?=$cfiles+1?>&amp;play=<?=$P?>&amp;<?=$queryUrl.$rsb->getUrlParams('&amp;')?>" title="Play this file"><?=$f?></a><?
-		}?>&nbsp;&nbsp;<a href="" onClick="return getInfos('<?=rawurlencode($l)?>','<?=rawurlencode($f)?>');" title="Show technical infos"><img style="vertical-align:-2px" src="/myicons/info-icon-2-13x13.png"></a></td>
+		}?>&nbsp;&nbsp;<a href="" onClick="return getInfos('<?=rawurlencode($l)?>','<?=rawurlencode($f)?>');" title="Show technical infos"><img style="vertical-align:-2px" src="search-info-icon-13x13.png"></a></td>
 		<td align=right><div class="<?=($s>10000) ? 'normalBigBold' : ''?>"><?=number_format($s,0,'.',' ')?> Kb</div></td>
 		<td align=center><a class="<?=($l==C_DIR_NEW) ? 'surlined' : ''?>" href="<?=$l?>" title="Go to this directory" target=_main><?=$l?></a></td>
 		<td nowrap><?
