@@ -45,6 +45,11 @@ $selfScript = $_SERVER['PHP_SELF'];
 /* Fix UTF-8 filename problems with system() & escapeshellarg() funcs... */
 setlocale(LC_CTYPE, "en_US.UTF-8");
 
+/* Disable the browser caching */
+header('Expires: 0');
+header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+header('Pragma: no-cache');
+
 /*  User access checks
  */
 require_once('auth.class.php');
@@ -129,11 +134,6 @@ if ( $frameMain ) {
 	<?
 	exit;
 }
-
-header('Expires: 0');
-header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-header('Pragma: no-cache');
-
 require_once('logmgr.class.php');
 $log = new LogMgr(C_LOG_FILE, 'MP3 Quick Search', LOG_OSYNC, $user->login);
 
