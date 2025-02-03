@@ -26,12 +26,18 @@ class PlayList {
 
 	private	$pl;		// array of audio files [0] = path (relative to $PL_MP3DIR), [1] = filename
 	private $pending;	// If pending changes need to be saved on disk
+	private $autoUpd;	// If true, update() is called at object's destroy time...
 
-	function __construct($pl, $load = TRUE) {
+	function __construct($pl, $load = TRUE, $autoUpdate = TRUE) {
 		$this->playlist = $pl;
 		$this->count    = 0;
 		$this->pending  = FALSE;
+		$this->autoUpd  = $autoUpdate;
 		if ( $load ) $this->load();
+	}
+	function __destruct() {
+		if ( $this->autoUpd )
+			$this->update();
 	}
 
 	static function myCompare($_a, $_b) {
@@ -92,18 +98,16 @@ class PlayList {
 		if ( ! $this->exist($file, $dir) && file_exists($dir.'/'.$file) ) {
 			$this->pl[] = array($dir, $file);
 			$this->count++;
-			$this->pending = TRUE;
 			$this->sort();
-			return TRUE;
-		}	
+			return $this->pending = TRUE;
+		}
 		return FALSE;
 	}
 
 	function remid($id) {
 		$this->pl[$id] = array();
 		$this->count--;
-		$this->pending = TRUE;
-		return TRUE;
+		return $this->pending = TRUE;
 	}
 
 	function rem($file, $dir) {

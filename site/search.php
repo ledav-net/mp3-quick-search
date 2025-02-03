@@ -368,7 +368,6 @@ if ( $priviledgedUser ) foreach ( $PLAYLISTS as $PL ) {
 		else	$PL['playlist']->rem($_POST['file'], $_POST['path']);
 	}
 	$PL['playlist']->cleanup(); // Remove not found mp3 (file moved/renamed)
-	$PL['playlist']->update();  // Update the playlist if needed
 }
 
 /***************************************************** GET INFOS WINDOW *********************************************************/
