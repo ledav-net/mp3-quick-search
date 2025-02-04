@@ -19,8 +19,8 @@ Main features:
 - Manage multiple playlists that you can use in a shoutcast webradio
 - ...
 
-I use this for myself so, it's not very well documented but should not be
-too complex to follow and adapt to your needs...
+I use this tool for myself so, it's not very well documented but should not
+be too complex to follow and adapt to your needs...
 
 The following is a working example using an apache's 2.4+ virtual host
 config and this repo as the basic "htdocs" structure:
@@ -49,16 +49,19 @@ config and this repo as the basic "htdocs" structure:
     │   ├── Example mp3 song 2.mp3
     │   └── Example mp3 song 3.mp3
     ├── cd02
-    │   └── Example mp3 song 1 from CD02.mp3
+    │   └── Example mp3 song 4.mp3
     ├── corrupt
     │   └── Corrupted mp3 at position 23sec.mp3
     ├── new
     │   └── New example mp3 not yet classified.mp3
     ├── new.nok
+    │   └── Example mp3 marked as bad. To be removed or ... later.mp3
     ├── new.ok
     │   └── Example mp3 marked as good. To be moved manually later in cd02 for example.mp3
     ├── search.css
     ├── search-genres.txt
+    ├── search-info-icon-13x13.png
+    ├── search-info-icon-64x64.png
     ├── search.php
     └── trashed
 ```
@@ -96,7 +99,7 @@ Virtual host config:
 	# and uncomment the following one.  You will then need to use
 	# `htpasswd /mp3-quick-search/auth/passwd foo` to change/create a
 	# hashed password for the user 'foo' ... And you will also need to
-	# change the line 51 in search.php about `$useApacheAuth=true` ...
+	# change the line 57 in search.php about `$useApacheAuth=true` ...
 
 	#<Location "/">
 	#	SSLRequireSSL
@@ -113,7 +116,9 @@ Virtual host config:
 
 Change the domain name `mp3.example.com` and the ip range as appropriate to
 suit your needs...  Or change your `/etc/hosts` to redirect
-`mp3.example.com` to the ip of your web server.  This is just an example...
+`mp3.example.com` to the ip of your web server.  You can also move the .css
+and the .png files in separate directories in '~/mp3-quick-search' and use
+aliases.  Here this is just an easy working example...
 
 Then you should be able to browse `https://mp3.example.com/` from your
 workstation in the `192.168.1.x` ip range as a regular user `foo` with the
