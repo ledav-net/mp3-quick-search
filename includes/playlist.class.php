@@ -30,7 +30,7 @@ class PlayList {
 	private $mp3dir;	// The directory of 'search.php' who is supposed to be in the root of the mp3 tree.
 
 	function __construct($pl, $load = TRUE, $autoUpdate = TRUE) {
-		$this->playlist = $pl;
+		$this->playlist = realpath($pl);
 		$this->count    = 0;
 		$this->pending  = FALSE;
 		$this->autoUpd  = $autoUpdate;
@@ -171,7 +171,8 @@ class PlayList {
 	function update() {
 		if ( ! $this->pending )
 			return FALSE;
-		$list = fopen($this->playlist, "wt");
+		if ( ! ($list = fopen($this->playlist, "wt")) )
+			exit(1);
 		if ( flock($list, LOCK_EX) !== TRUE ) {
 			echo("ERROR LOCKING ".$this->playlist." in EX mode !");
 			exit(2);
