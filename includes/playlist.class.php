@@ -20,21 +20,21 @@
  *
  */
 
-define('PL_MP3DIR', '/site');
-
 class PlayList {
 	public	$playlist;	// Full path and file name of the playlist
 	public  $count;		// Total number of entries
 
-	private	$pl;		// array of audio files [0] = path (relative to $PL_MP3DIR), [1] = filename
+	private	$pl;		// array of audio files [0] = path (relative to $$this->mp3dir), [1] = filename
 	private $pending;	// If pending changes need to be saved on disk
 	private $autoUpd;	// If true, update() is called at object's destroy time...
+	private $mp3dir;	// The directory of 'search.php' who is supposed to be in the root of the mp3 tree.
 
 	function __construct($pl, $load = TRUE, $autoUpdate = TRUE) {
 		$this->playlist = $pl;
 		$this->count    = 0;
 		$this->pending  = FALSE;
 		$this->autoUpd  = $autoUpdate;
+		$this->mp3dir   = dirname($_SERVER['SCRIPT_FILENAME']);
 		if ( $load ) $this->load();
 	}
 	function __destruct() {
@@ -88,7 +88,8 @@ class PlayList {
 				echo $baseurl.'/'.$song[0].'/'.str_replace('%2F','/',rawurlencode($song[1]))."\n";
 	}
 
-	function output($root = PL_MP3DIR) {
+	function output($root = FALSE) {
+		if ( $root === FALSE ) $root = $this->mp3dir;
 		foreach ( $this->pl as $song )
 			if ( ! empty($song) )
 				echo $root.'/'.$song[0].'/'.$song[1]."\n";
@@ -106,7 +107,7 @@ class PlayList {
 
 	function add($file, $dir) {
 		if ( $this->exist($file, $dir) === FALSE
-		&&   file_exists(PL_MP3DIR.'/'.$dir.'/'.$file) ) {
+		&&   file_exists($this->mp3dir.'/'.$dir.'/'.$file) ) {
 			$this->pl[] = array($dir, $file);
 			$this->count++;
 			$this->sort();
@@ -130,7 +131,7 @@ class PlayList {
 
 	function chgid($id, $oldFile, $newDir, $newFile = "") {
 		if ( ! $newFile ) $newFile = $oldFile; else $sort = TRUE;
-		if ( file_exists(PL_MP3DIR.'/'.$newDir.'/'.$newFile) ) {
+		if ( file_exists($this->mp3dir.'/'.$newDir.'/'.$newFile) ) {
 			$this->pl[$id] = array($newDir, $newFile);
 			if ( $sort ) $this->sort();
 			return $this->pending = TRUE;
@@ -145,7 +146,7 @@ class PlayList {
 	}
 
 	function findFileSubdir($song) {
-		$f = @popen('find '.PL_MP3DIR.' -not -path "*/.*" -type f -name '.escapeshellarg($song), 'r');
+		$f = @popen('find '.$this->mp3dir.' -not -path "*/.*" -type f -name '.escapeshellarg($song), 'r');
 		while ( ($line = @fgets($f)) )
 			$r = basename(dirname($line));
 		fclose($f);
@@ -157,7 +158,7 @@ class PlayList {
 		foreach ( $this->pl as $id => $song ) {
 			if ( empty($song) )
 				continue;
-			if ( ! file_exists(PL_MP3DIR.'/'.$song[0].'/'.$song[1]) ) {
+			if ( ! file_exists($this->mp3dir.'/'.$song[0].'/'.$song[1]) ) {
 				$newdir = $this->findFileSubdir($song[1]);
 				if ( $newdir )
 					$pending = $this->chgid($id, $song[1], $newdir) || $pending;
@@ -177,7 +178,7 @@ class PlayList {
 		}
 		foreach ( $this->pl as $song )
 			if ( ! empty($song) )
-				fprintf($list, PL_MP3DIR.'/'.$song[0].'/'.$song[1]."\n");
+				fprintf($list, $this->mp3dir.'/'.$song[0].'/'.$song[1]."\n");
 		fclose($list);
 		$this->pending = FALSE;
 		return TRUE;
