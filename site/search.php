@@ -31,11 +31,11 @@ define('C_DIR_TRASH', 'trashed');	/* Trash directory. Where the 'deleted' files 
 define('C_LOG_FILE',   '../logs/search.log');	/* Log file path/name */
 define('C_TXT_GENRES', 'search-genres.txt');	/* Text file with id|text for the category list */
 
-define('C_BIN_MP3INFO', '/usr/bin/mp3info');			/* mp3info tool path/name (MP3Info >= 0.8.5a) */
-define('C_BIN_CUTMP3',  '/usr/bin/cutmp3');			/* cutmp3 tool path/name (cutmp3 >= 3.0.1) */
-define('C_BIN_MP3GAIN', '/usr/bin/mp3gain');			/* mp3gain tool path/name (mp3gain >= 1.6.2) */
-define('C_BIN_MP3STRIP','/usr/local/bin/mp3stripv2tag');	/* mp3stripv2tag tool path/name */
-define('C_BIN_FIND',	'/usr/bin/find');			/* find tool path/name */
+define('C_BIN_MP3INFO',    '/usr/local/bin/mp3info');	/* mp3info tool path/name (MP3Info >= 0.8.5a) */
+define('C_BIN_CUTMP3',     '/usr/local/bin/cutmp3');	/* cutmp3 tool path/name (cutmp3 >= 3.0.1) */
+define('C_BIN_MP3GAIN',    '/usr/local/bin/mp3gain');	/* mp3gain tool path/name (mp3gain >= 1.6.2) */
+define('C_BIN_ID3CONVERT', '/usr/bin/id3convert');	/* id3convert tool path/name (id3lib >= 3.8.3) */
+define('C_BIN_FIND',       '/usr/bin/find');		/* find tool path/name */
 
 define('C_PUBLIC_URL',	'https://mp3.example.com');	/* Public url to access the mp3 (for winamp playlist) */
 define('C_MAX_ROWS',	50);				/* Default number of rows to show per page */
@@ -298,7 +298,7 @@ if ( $priviledgedUser ) {
 	}else
 	if ( isset($_POST['btnupdatetag']) ) {
 		$log->add("Updating tag v1 of '$fileName' ($filePath) ...");
-		system(C_BIN_MP3STRIP.' '.escapeshellarg("$filePath/$fileName").' &> /dev/null');
+		@system(C_BIN_ID3CONVERT.' -s '.escapeshellarg("$filePath/$fileName").' &>/dev/null');
 		if ( $_POST['genrevalue'] == '' || $_POST['genrevalue'] == '255' ) $_POST['genrevalue'] = '12' /* Other */;
 		system(C_BIN_MP3INFO.
 		        " -a ".escapeshellarg($_POST['artist']).
@@ -314,12 +314,12 @@ if ( $priviledgedUser ) {
 	}else
 	if ( isset($_POST['btnstripv1tag']) ) {
 		$log->add("Stripping v1 tag from '$fileName' ($filePath)");
-		system(C_BIN_MP3INFO.' -d -- '.escapeshellarg("$filePath/$fileName").' >> '.$log->logFile.' 2>&1');
+		@system(C_BIN_ID3CONVERT.' -1 -s '.escapeshellarg("$filePath/$fileName").' &>/dev/null');
 		$showMsg[] = array("msg_success", "Tag v1 stripped !");
 	}else
 	if ( isset($_POST['btnstripv2tag']) ) {
 		$log->add("Stripping v2 tag from '$fileName' ($filePath)");
-		system(C_BIN_MP3STRIP.' '.escapeshellarg("$filePath/$fileName").' &> /dev/null');
+		@system(C_BIN_ID3CONVERT.' -2 -s '.escapeshellarg("$filePath/$fileName").' &>/dev/null');
 		$showMsg[] = array("msg_success", "Tag v2 stripped !");
 	}
 }
