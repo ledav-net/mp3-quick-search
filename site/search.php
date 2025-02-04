@@ -479,6 +479,16 @@ $rf=rawurlencode($fileName);
 		$mp3infohtml['year']       = &$mp3info[5];
 		$mp3infohtml['comment']    = &$mp3info[6];
 		$mp3infohtml['genrevalue'] = &$mp3info[7];
+		$f = fopen(C_TXT_GENRES, "r");
+		while ( ($r = fgets($f, 64)) ) {
+			if ( $r[0] == '#' ) continue;
+			list($id, $name) = explode('|', chop($r));
+			if ( $mp3info[7] == $id ) {
+				$mp3infohtml['genrevalue'] = $name;
+				break;
+			}
+		}
+		fclose($f);
 	}?>
 	<tr><td width="18%" valign=top>File:</td><td colspan=3><?=$mp3info[0]?></td></tr>
 	<tr><td>Title:</td><td width="45%"><?=$mp3infohtml['title']?></td><td width="10%">Track:</td><td><?=$mp3infohtml['track']?></td></tr>
